@@ -53,7 +53,7 @@ class SiteSettingSeeder extends Seeder
             // Public Website Branding
             [
                 'key' => 'public_logo_light',
-                'value' => null,
+                'value' => '/images/branding/public_logo_light.svg',
                 'group' => 'branding',
                 'type' => 'string',
                 'label' => 'Logo Public (Light Mode)',
@@ -61,7 +61,7 @@ class SiteSettingSeeder extends Seeder
             ],
             [
                 'key' => 'public_logo_dark',
-                'value' => null,
+                'value' => '/images/branding/public_logo_dark.svg',
                 'group' => 'branding',
                 'type' => 'string',
                 'label' => 'Logo Public (Dark Mode)',
@@ -69,7 +69,7 @@ class SiteSettingSeeder extends Seeder
             ],
             [
                 'key' => 'public_logo_mobile',
-                'value' => null,
+                'value' => '/images/branding/public_logo_light.svg',
                 'group' => 'branding',
                 'type' => 'string',
                 'label' => 'Logo Public Mobile',
@@ -77,7 +77,7 @@ class SiteSettingSeeder extends Seeder
             ],
             [
                 'key' => 'public_logo_footer',
-                'value' => null,
+                'value' => '/images/branding/public_logo_dark.svg',
                 'group' => 'branding',
                 'type' => 'string',
                 'label' => 'Logo Public Footer',
@@ -85,7 +85,7 @@ class SiteSettingSeeder extends Seeder
             ],
             [
                 'key' => 'public_favicon',
-                'value' => null,
+                'value' => '/images/branding/public_favicon.svg',
                 'group' => 'branding',
                 'type' => 'string',
                 'label' => 'Favicon Website',
@@ -93,7 +93,7 @@ class SiteSettingSeeder extends Seeder
             ],
             [
                 'key' => 'public_apple_touch_icon',
-                'value' => null,
+                'value' => '/images/branding/public_apple_touch_icon.svg',
                 'group' => 'branding',
                 'type' => 'string',
                 'label' => 'Apple Touch Icon',
@@ -102,7 +102,7 @@ class SiteSettingSeeder extends Seeder
             // Admin Dashboard Branding
             [
                 'key' => 'admin_logo_light',
-                'value' => null,
+                'value' => '/images/branding/admin_logo_light.svg',
                 'group' => 'branding',
                 'type' => 'string',
                 'label' => 'Logo Admin (Light Mode)',
@@ -110,7 +110,7 @@ class SiteSettingSeeder extends Seeder
             ],
             [
                 'key' => 'admin_logo_dark',
-                'value' => null,
+                'value' => '/images/branding/admin_logo_dark.svg',
                 'group' => 'branding',
                 'type' => 'string',
                 'label' => 'Logo Admin (Dark Mode)',
@@ -118,7 +118,7 @@ class SiteSettingSeeder extends Seeder
             ],
             [
                 'key' => 'admin_logo_collapsed',
-                'value' => null,
+                'value' => '/images/branding/admin_logo_collapsed.svg',
                 'group' => 'branding',
                 'type' => 'string',
                 'label' => 'Logo Admin Collapsed (Icon Only)',
@@ -126,7 +126,7 @@ class SiteSettingSeeder extends Seeder
             ],
             [
                 'key' => 'admin_favicon',
-                'value' => null,
+                'value' => '/images/branding/public_favicon.svg',
                 'group' => 'branding',
                 'type' => 'string',
                 'label' => 'Favicon Admin Panel',
@@ -134,7 +134,7 @@ class SiteSettingSeeder extends Seeder
             ],
             [
                 'key' => 'admin_login_logo',
-                'value' => null,
+                'value' => '/images/branding/public_logo_light.svg',
                 'group' => 'branding',
                 'type' => 'string',
                 'label' => 'Logo Halaman Login Admin',
@@ -143,7 +143,9 @@ class SiteSettingSeeder extends Seeder
         ];
 
         foreach ($settings as $setting) {
-            SiteSetting::firstOrCreate(['key' => $setting['key']], $setting);
+            SiteSetting::updateOrCreate(['key' => $setting['key']], $setting);
         }
+
+        \Illuminate\Support\Facades\Cache::forget(\App\Http\Controllers\Admin\BrandingController::CACHE_KEY);
     }
 }

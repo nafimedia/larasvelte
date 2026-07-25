@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 50" width="220" height="50" fill="none">
+  <rect width="36" height="36" x="6" y="7" rx="10" fill="url(#gradAdmin2)"/>
+  <path d="M21 15L28 25H23.5L19.5 19L15.5 25H11L18 15H21Z" fill="white"/>
+  <path d="M24 35L17 25H21.5L25.5 31L29.5 25H34L27 35H24Z" fill="white" opacity="0.85"/>
+  <text x="52" y="31" font-family="Plus Jakarta Sans, sans-serif" font-weight="800" font-size="20" fill="#F8FAFC">Admin<tspan fill="#38BDF8">Panel</tspan></text>
+  <defs>
+    <linearGradient id="gradAdmin2" x1="6" y1="7" x2="42" y2="43" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6366F1"/>
+      <stop offset="1" stop-color="#0EA5E9"/>
+    </linearGradient>
+  </defs>
+</svg>

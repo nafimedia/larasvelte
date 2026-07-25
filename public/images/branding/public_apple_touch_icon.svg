@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" width="180" height="180" fill="none">
+  <rect width="180" height="180" rx="40" fill="url(#gradApple)"/>
+  <path d="M96 50L135 96H108L87 70L66 96H39L78 50H96Z" fill="white"/>
+  <path d="M108 140L69 94H96L117 120L138 94H165L126 140H108Z" fill="white" opacity="0.85"/>
+  <defs>
+    <linearGradient id="gradApple" x1="0" y1="0" x2="180" y2="180" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4F46E5"/>
+      <stop offset="1" stop-color="#9333EA"/>
+    </linearGradient>
+  </defs>
+</svg>

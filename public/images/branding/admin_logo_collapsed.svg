@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
+  <rect width="48" height="48" rx="14" fill="url(#gradColl)"/>
+  <path d="M26 13L36 25H29.5L24.5 18.5L19.5 25H13L23 13H26Z" fill="white"/>
+  <path d="M29 37L19 25H25.5L30.5 31.5L35.5 25H42L32 37H29Z" fill="white" opacity="0.85"/>
+  <defs>
+    <linearGradient id="gradColl" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6366F1"/>
+      <stop offset="1" stop-color="#0EA5E9"/>
+    </linearGradient>
+  </defs>
+</svg>

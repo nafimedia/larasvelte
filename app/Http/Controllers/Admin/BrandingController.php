@@ -39,7 +39,7 @@ class BrandingController extends Controller
         $branding = [];
         foreach ($brandingKeys as $key) {
             $value = $settings->get($key)?->value;
-            $url = $value ? (str_starts_with($value, 'http') ? $value : Storage::disk('public')->url($value)) : null;
+            $url = self::formatUrl($value);
             $branding[$key] = [
                 'key' => $key,
                 'value' => $value,
@@ -52,6 +52,22 @@ class BrandingController extends Controller
         return Inertia::render('Admin/Settings/Branding', [
             'branding' => $branding,
         ]);
+    }
+
+    /**
+     * Helper to format branding asset URL.
+     */
+    public static function formatUrl(?string $value): ?string
+    {
+        if (! $value) {
+            return null;
+        }
+
+        if (str_starts_with($value, 'http://') || str_starts_with($value, 'https://') || str_starts_with($value, '/')) {
+            return $value;
+        }
+
+        return Storage::disk('public')->url($value);
     }
 
     /**
@@ -148,7 +164,7 @@ class BrandingController extends Controller
             $result = [];
             foreach ($brandingKeys as $key) {
                 $val = $settings[$key] ?? null;
-                $result[$key] = $val ? (str_starts_with($val, 'http') ? $val : Storage::disk('public')->url($val)) : null;
+                $result[$key] = self::formatUrl($val);
             }
 
             return $result;
