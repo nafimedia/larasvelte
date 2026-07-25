@@ -25,7 +25,7 @@ class FormBuilderController extends Controller
             ->latest()
             ->get();
 
-        return Inertia::render('Admin/CMS/Forms/Index', [
+        return Inertia::render('Admin/Cms/Forms/Index', [
             'forms' => $forms,
         ]);
     }
@@ -58,15 +58,17 @@ class FormBuilderController extends Controller
         ]);
 
         // Add a default first text question
-        FormField::create([
-            'form_id' => $form->id,
+        $form->fields()->create([
             'type' => 'text',
             'label' => 'Pertanyaan Tanpa Judul',
+            'help_text' => '',
+            'placeholder' => '',
+            'options' => ['Opsi 1'],
             'is_required' => false,
             'order' => 1,
         ]);
 
-        activity('forms')
+        activity()
             ->causedBy($request->user())
             ->log("Membuat Formulir Baru: {$form->title}");
 
@@ -84,7 +86,7 @@ class FormBuilderController extends Controller
             $query->latest();
         }])->findOrFail($id);
 
-        return Inertia::render('Admin/CMS/Forms/Builder', [
+        return Inertia::render('Admin/Cms/Forms/Builder', [
             'form' => $form,
         ]);
     }
