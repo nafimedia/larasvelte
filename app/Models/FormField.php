@@ -6,31 +6,29 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class FormSubmission extends Model
+class FormField extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'form_id',
-        'user_id',
-        'ip_address',
-        'user_agent',
-        'response_data',
-        'is_read',
+        'type',
+        'label',
+        'help_text',
+        'placeholder',
+        'options',
+        'is_required',
+        'order',
     ];
 
     protected $casts = [
-        'response_data' => 'array',
-        'is_read' => 'boolean',
+        'options' => 'array',
+        'is_required' => 'boolean',
+        'order' => 'integer',
     ];
 
     public function form(): BelongsTo
     {
         return $this->belongsTo(Form::class);
-    }
-
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
     }
 }

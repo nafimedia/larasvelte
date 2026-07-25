@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\BrandingController;
 use App\Http\Controllers\Admin\ModuleController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\PublicFormController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\ProfileController;
 use App\Http\Controllers\BlogController;
@@ -165,11 +166,15 @@ Route::middleware('auth')->group(function () {
                 Route::delete('/media/{id}', [MediaController::class, 'destroy'])->name('media.destroy');
             });
 
-            // Dynamic Form Builder
+            // Dynamic Form Builder Studio (Google Forms Style)
             Route::middleware('module:forms')->group(function () {
                 Route::get('/forms', [FormBuilderController::class, 'index'])->name('forms.index');
                 Route::post('/forms', [FormBuilderController::class, 'store'])->name('forms.store');
-                Route::get('/forms/{id}/submissions', [FormBuilderController::class, 'submissions'])->name('forms.submissions');
+                Route::get('/forms/{id}/builder', [FormBuilderController::class, 'builder'])->name('forms.builder');
+                Route::put('/forms/{id}', [FormBuilderController::class, 'update'])->name('forms.update');
+                Route::delete('/forms/{id}', [FormBuilderController::class, 'destroy'])->name('forms.destroy');
+                Route::patch('/forms/{id}/toggle-responses', [FormBuilderController::class, 'toggleResponses'])->name('forms.toggle-responses');
+                Route::get('/forms/{id}/export', [FormBuilderController::class, 'exportCsv'])->name('forms.export');
             });
 
             // Redirect Manager 301/302
@@ -185,9 +190,10 @@ Route::middleware('auth')->group(function () {
             });
         });
 
-// Public Form Submission Route
+// Public Google Forms Response Routes
 Route::middleware('module:forms')->group(function () {
-    Route::post('/forms/{slug}/submit', [FormBuilderController::class, 'submitPublicForm'])->name('forms.public.submit');
+    Route::get('/f/{slug}', [PublicFormController::class, 'show'])->name('forms.public.show');
+    Route::post('/f/{slug}/submit', [PublicFormController::class, 'submit'])->name('forms.public.submit');
 });
 
         // Users Management

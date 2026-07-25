@@ -50,6 +50,47 @@ export interface ModuleItem {
     order: number;
 }
 
+export interface FormFieldItem {
+    id?: number;
+    form_id?: number;
+    type: 'text' | 'paragraph' | 'multiple_choice' | 'checkboxes' | 'dropdown' | 'file' | 'date' | 'rating';
+    label: string;
+    help_text?: string | null;
+    placeholder?: string | null;
+    options?: string[] | null;
+    is_required: boolean;
+    order: number;
+}
+
+export interface FormSubmissionItem {
+    id: number;
+    form_id: number;
+    user_id?: number | null;
+    ip_address?: string | null;
+    user_agent?: string | null;
+    response_data: Record<string, any>;
+    is_read: boolean;
+    created_at: string;
+}
+
+export interface FormItem {
+    id: number;
+    title: string;
+    slug: string;
+    description?: string | null;
+    header_image?: string | null;
+    theme_color: string;
+    is_accepting_responses: boolean;
+    confirmation_message: string;
+    require_login: boolean;
+    created_by?: number | null;
+    created_at: string;
+    updated_at: string;
+    fields?: FormFieldItem[];
+    submissions?: FormSubmissionItem[];
+    submissions_count?: number;
+}
+
 export interface FlashMessages {
     success?: string;
     error?: string;
