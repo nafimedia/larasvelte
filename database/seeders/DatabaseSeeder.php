@@ -12,10 +12,12 @@ class DatabaseSeeder extends Seeder
             RolePermissionSeeder::class,
             SiteSettingSeeder::class,
             UserSeeder::class,
+            ModuleSeeder::class,
             CategorySeeder::class,
             TagSeeder::class,
             PostSeeder::class,
             CmsMenuSeeder::class,
+            FormSeeder::class,
         ]);
     }
 }
