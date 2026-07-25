@@ -31,6 +31,8 @@
     import DynamicSectionRenderer from '@/Components/Landing/DynamicSectionRenderer.svelte';
     import ThemeToggle from '@/Components/UI/ThemeToggle.svelte';
 
+    import type { PageProps } from '@/lib/types';
+
     interface Props {
         dynamicSections?: any[];
         themeSettings?: any;
@@ -52,7 +54,10 @@
         }, 2000);
     }
 
-    const authUser = $derived(page.props.auth?.user);
+    const pageProps = $derived(page.props as unknown as PageProps);
+    const authUser = $derived(pageProps.auth?.user);
+    const site = $derived(pageProps.site || { name: 'LaraSvelte', description: '' });
+    const branding = $derived(pageProps.branding || {});
 
     const techStack = [
         {
