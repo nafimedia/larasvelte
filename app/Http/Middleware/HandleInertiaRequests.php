@@ -63,6 +63,7 @@ class HandleInertiaRequests extends Middleware
             'branding' => \Illuminate\Support\Facades\Schema::hasTable('site_settings')
                 ? \App\Http\Controllers\Admin\BrandingController::getCachedBranding()
                 : [],
+            'modules' => \App\Models\Module::getCachedActiveModules(),
             'flash' => [
                 'success' => fn () => $request->session()->get('success'),
                 'error' => fn () => $request->session()->get('error'),

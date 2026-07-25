@@ -31,6 +31,8 @@ class RolePermissionSeeder extends Seeder
             'settings.edit',
             'branding.view',
             'branding.edit',
+            'modules.view',
+            'modules.edit',
         ];
 
         foreach ($permissions as $permission) {

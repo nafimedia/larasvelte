@@ -38,6 +38,18 @@ export interface BrandingAsset {
     description?: string;
 }
 
+export interface ModuleItem {
+    id: number;
+    key: string;
+    name: string;
+    group: 'content' | 'builder' | 'seo' | 'media' | 'system';
+    description?: string;
+    icon?: string;
+    is_active: boolean;
+    is_system: boolean;
+    order: number;
+}
+
 export interface FlashMessages {
     success?: string;
     error?: string;
@@ -51,6 +63,7 @@ export interface PageProps {
     };
     site: SiteSettings;
     branding: BrandingSettings;
+    modules: Record<string, boolean>;
     flash: FlashMessages;
     errors: Record<string, string>;
 }

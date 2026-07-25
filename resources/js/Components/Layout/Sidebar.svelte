@@ -24,6 +24,7 @@
         ChevronLeft,
         PanelLeftClose,
         PanelLeftOpen,
+        Layers,
     } from 'lucide-svelte';
     import type { PageProps } from '@/lib/types';
 
@@ -38,7 +39,14 @@
     const user = $derived(pageProps.auth.user);
     const branding = $derived(pageProps.branding);
     const site = $derived(pageProps.site);
+    const modules = $derived(pageProps.modules);
     const currentUrl = $derived(page.url);
+
+    function isModuleActive(key?: string): boolean {
+        if (!key) return true;
+        if (!modules) return true;
+        return modules[key] !== false;
+    }
 
     // Sidebar Collapsed (Icon-Only Mode) State
     let isCollapsed = $state(
@@ -112,42 +120,42 @@
                     href: '/admin/cms/posts',
                     icon: Newspaper,
                     active: currentUrl.startsWith('/admin/cms/posts'),
-                    show: true,
+                    show: isModuleActive('posts'),
                 },
                 {
                     name: 'Halaman Web',
                     href: '/admin/cms/pages',
                     icon: FileText,
                     active: currentUrl.startsWith('/admin/cms/pages'),
-                    show: true,
+                    show: isModuleActive('pages'),
                 },
                 {
                     name: 'Kategori Artikel',
                     href: '/admin/cms/categories',
                     icon: Folder,
                     active: currentUrl.startsWith('/admin/cms/categories'),
-                    show: true,
+                    show: isModuleActive('categories'),
                 },
                 {
                     name: 'Tag Artikel',
                     href: '/admin/cms/tags',
                     icon: Tag,
                     active: currentUrl.startsWith('/admin/cms/tags'),
-                    show: true,
+                    show: isModuleActive('categories'),
                 },
                 {
                     name: 'Kalender Publikasi',
                     href: '/admin/cms/calendar',
                     icon: Calendar,
                     active: currentUrl.startsWith('/admin/cms/calendar'),
-                    show: true,
+                    show: isModuleActive('calendar') && isModuleActive('posts'),
                 },
                 {
                     name: 'Komentar',
                     href: '/admin/cms/comments',
                     icon: MessageSquare,
                     active: currentUrl.startsWith('/admin/cms/comments'),
-                    show: true,
+                    show: isModuleActive('comments'),
                 },
             ],
         },
@@ -160,21 +168,21 @@
                     href: '/admin/landing-builder',
                     icon: Sparkles,
                     active: currentUrl.startsWith('/admin/landing-builder'),
-                    show: true,
+                    show: isModuleActive('landing_builder'),
                 },
                 {
                     name: 'Menu Navigasi',
                     href: '/admin/cms/menus',
                     icon: Menu,
                     active: currentUrl.startsWith('/admin/cms/menus'),
-                    show: true,
+                    show: isModuleActive('menus'),
                 },
                 {
                     name: 'Form Builder',
                     href: '/admin/cms/forms',
                     icon: FileSpreadsheet,
                     active: currentUrl.startsWith('/admin/cms/forms'),
-                    show: true,
+                    show: isModuleActive('forms'),
                 },
             ],
         },
@@ -187,7 +195,7 @@
                     href: '/admin/cms/media',
                     icon: Image,
                     active: currentUrl.startsWith('/admin/cms/media'),
-                    show: true,
+                    show: isModuleActive('media'),
                 },
             ],
         },
@@ -200,14 +208,14 @@
                     href: '/admin/cms/redirects',
                     icon: ArrowRightLeft,
                     active: currentUrl.startsWith('/admin/cms/redirects'),
-                    show: true,
+                    show: isModuleActive('redirects'),
                 },
                 {
                     name: 'CMS Analitik',
                     href: '/admin/cms/analytics',
                     icon: BarChart3,
                     active: currentUrl.startsWith('/admin/cms/analytics'),
-                    show: true,
+                    show: isModuleActive('analytics'),
                 },
             ],
         },
@@ -220,35 +228,42 @@
                     href: '/admin/users',
                     icon: Users,
                     active: currentUrl.startsWith('/admin/users'),
-                    show: hasPermission('users.view'),
+                    show: hasPermission('users.view') && isModuleActive('users'),
                 },
                 {
                     name: 'Role & Izin (RBAC)',
                     href: '/admin/roles',
                     icon: ShieldCheck,
                     active: currentUrl.startsWith('/admin/roles'),
-                    show: hasPermission('roles.view'),
+                    show: hasPermission('roles.view') && isModuleActive('roles'),
                 },
                 {
                     name: 'Log Aktivitas',
                     href: '/admin/activity-logs',
                     icon: Activity,
                     active: currentUrl.startsWith('/admin/activity-logs'),
-                    show: hasPermission('activity_logs.view'),
+                    show: hasPermission('activity_logs.view') && isModuleActive('activity_logs'),
                 },
                 {
                     name: 'Pengaturan Situs',
                     href: '/admin/settings',
                     icon: Settings,
                     active: currentUrl === '/admin/settings',
-                    show: hasPermission('settings.view'),
+                    show: hasPermission('settings.view') && isModuleActive('settings'),
                 },
                 {
                     name: 'Branding & Logo',
                     href: '/admin/settings/branding',
                     icon: Sparkles,
                     active: currentUrl.startsWith('/admin/settings/branding'),
-                    show: hasPermission('settings.view'),
+                    show: hasPermission('settings.view') && isModuleActive('settings'),
+                },
+                {
+                    name: 'Manajemen Modul',
+                    href: '/admin/settings/modules',
+                    icon: Layers,
+                    active: currentUrl.startsWith('/admin/settings/modules'),
+                    show: hasPermission('modules.view') && isModuleActive('modules'),
                 },
             ],
         },
