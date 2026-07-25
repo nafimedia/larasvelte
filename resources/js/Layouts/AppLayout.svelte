@@ -2,6 +2,7 @@
     import { page } from '@inertiajs/svelte';
     import Navbar from '@/Components/Layout/Navbar.svelte';
     import Sidebar from '@/Components/Layout/Sidebar.svelte';
+    import AutoLogout from '@/Components/UI/AutoLogout.svelte';
     import { Toaster, toast } from 'svelte-sonner';
     import type { Snippet } from 'svelte';
     import type { PageProps } from '@/lib/types';
@@ -39,6 +40,9 @@
 </svelte:head>
 
 <div class="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col font-sans transition-colors">
+    <!-- Auto Logout Handler for Inactive Users (30 mins) -->
+    <AutoLogout timeoutMinutes={30} warningMinutes={2} />
+
     <!-- Sonner Toaster -->
     <Toaster position="top-right" richColors closeButton />
 
