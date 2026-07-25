@@ -16,6 +16,7 @@
     const pageProps = $derived(page.props as unknown as PageProps);
     const user = $derived(pageProps.auth.user);
     const site = $derived(pageProps.site);
+    const branding = $derived(pageProps.branding);
 </script>
 
 <header class="sticky top-0 z-30 h-16 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-4 sm:px-6 flex items-center justify-between transition-colors">
@@ -31,12 +32,21 @@
         </button>
 
         <div class="flex items-center gap-2">
-            <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center text-white font-bold text-sm shadow-md shadow-indigo-500/20">
-                {site.name.substring(0, 2).toUpperCase()}
-            </div>
-            <span class="font-bold text-base text-slate-900 dark:text-slate-100 tracking-tight hidden sm:inline-block">
-                {site.name}
-            </span>
+            {#if branding?.admin_logo_dark || branding?.admin_logo_light}
+                <div class="h-8 flex items-center">
+                    {#if branding.admin_logo_dark}
+                        <img src={branding.admin_logo_dark} alt={site.name} class="h-7 object-contain hidden dark:block" />
+                    {/if}
+                    <img src={branding.admin_logo_light || branding.admin_logo_dark} alt={site.name} class={`h-7 object-contain ${branding.admin_logo_dark ? 'dark:hidden' : ''}`} />
+                </div>
+            {:else}
+                <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center text-white font-bold text-sm shadow-md shadow-indigo-500/20">
+                    {site.name.substring(0, 2).toUpperCase()}
+                </div>
+                <span class="font-bold text-base text-slate-900 dark:text-slate-100 tracking-tight hidden sm:inline-block">
+                    {site.name}
+                </span>
+            {/if}
         </div>
     </div>
 

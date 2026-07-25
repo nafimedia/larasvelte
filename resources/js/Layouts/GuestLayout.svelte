@@ -14,6 +14,7 @@
 
     const pageProps = $derived(page.props as unknown as PageProps);
     const site = $derived(pageProps.site);
+    const branding = $derived(pageProps.branding);
     const flash = $derived(pageProps.flash);
 
     $effect(() => {
@@ -25,6 +26,12 @@
 
 <svelte:head>
     <title>{title} - {site.name}</title>
+    {#if branding?.admin_favicon || branding?.public_favicon}
+        <link rel="icon" href={branding?.admin_favicon || branding?.public_favicon} />
+    {/if}
+    {#if branding?.public_apple_touch_icon}
+        <link rel="apple-touch-icon" href={branding.public_apple_touch_icon} />
+    {/if}
 </svelte:head>
 
 <div class="min-h-screen bg-gradient-to-br from-slate-100 via-indigo-50/30 to-slate-200 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 flex flex-col justify-between p-4 sm:p-6 transition-colors">
@@ -33,10 +40,17 @@
     <!-- Top Bar -->
     <div class="flex items-center justify-between max-w-md w-full mx-auto">
         <div class="flex items-center gap-2">
-            <div class="w-8 h-8 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-md shadow-indigo-500/20">
-                LS
-            </div>
-            <span class="font-bold text-slate-900 dark:text-slate-100">{site.name}</span>
+            {#if branding?.admin_login_logo}
+                <img src={branding.admin_login_logo} alt={site.name} class="h-8 object-contain" />
+            {:else if branding?.admin_logo_dark || branding?.admin_logo_light}
+                <img src={branding.admin_logo_dark} alt={site.name} class="h-8 object-contain hidden dark:block" />
+                <img src={branding.admin_logo_light || branding.admin_logo_dark} alt={site.name} class={`h-8 object-contain ${branding.admin_logo_dark ? 'dark:hidden' : ''}`} />
+            {:else}
+                <div class="w-8 h-8 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-md shadow-indigo-500/20">
+                    LS
+                </div>
+                <span class="font-bold text-slate-900 dark:text-slate-100">{site.name}</span>
+            {/if}
         </div>
         <ThemeToggle />
     </div>

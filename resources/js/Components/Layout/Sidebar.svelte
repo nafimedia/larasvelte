@@ -36,6 +36,8 @@
 
     const pageProps = $derived(page.props as unknown as PageProps);
     const user = $derived(pageProps.auth.user);
+    const branding = $derived(pageProps.branding);
+    const site = $derived(pageProps.site);
     const currentUrl = $derived(page.url);
 
     // Sidebar Collapsed (Icon-Only Mode) State
@@ -238,7 +240,14 @@
                     name: 'Pengaturan Situs',
                     href: '/admin/settings',
                     icon: Settings,
-                    active: currentUrl.startsWith('/admin/settings'),
+                    active: currentUrl === '/admin/settings',
+                    show: hasPermission('settings.view'),
+                },
+                {
+                    name: 'Branding & Logo',
+                    href: '/admin/settings/branding',
+                    icon: Sparkles,
+                    active: currentUrl.startsWith('/admin/settings/branding'),
                     show: hasPermission('settings.view'),
                 },
             ],
@@ -279,15 +288,32 @@
     <div class="flex flex-col flex-1 min-h-0">
         <!-- Brand Banner -->
         <div class={`h-16 border-b border-slate-200 dark:border-slate-800 flex items-center px-4 justify-between shrink-0 ${isCollapsed ? 'justify-center' : 'px-6'}`}>
-            <Link href="/admin/dashboard" class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-600 flex items-center justify-center text-white font-bold text-sm shadow-md shadow-indigo-500/25 shrink-0">
-                    FK
-                </div>
-                {#if !isCollapsed}
-                    <div class="truncate">
-                        <h1 class="font-bold text-sm text-slate-900 dark:text-slate-100 leading-none">FairuzKit</h1>
-                        <span class="text-[10px] text-indigo-500 font-semibold tracking-wider uppercase">Enterprise CMS</span>
-                    </div>
+            <Link href="/admin/dashboard" class="flex items-center gap-3 max-w-full overflow-hidden">
+                {#if isCollapsed}
+                    {#if branding?.admin_logo_collapsed}
+                        <img src={branding.admin_logo_collapsed} alt="Logo" class="w-8 h-8 object-contain shrink-0" />
+                    {:else}
+                        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-600 flex items-center justify-center text-white font-bold text-sm shadow-md shadow-indigo-500/25 shrink-0">
+                            FK
+                        </div>
+                    {/if}
+                {:else}
+                    {#if branding?.admin_logo_dark || branding?.admin_logo_light}
+                        <div class="h-9 flex items-center">
+                            {#if branding.admin_logo_dark}
+                                <img src={branding.admin_logo_dark} alt={site?.name || 'Admin Logo'} class="h-8 object-contain hidden dark:block" />
+                            {/if}
+                            <img src={branding.admin_logo_light || branding.admin_logo_dark} alt={site?.name || 'Admin Logo'} class={`h-8 object-contain ${branding.admin_logo_dark ? 'dark:hidden' : ''}`} />
+                        </div>
+                    {:else}
+                        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-600 flex items-center justify-center text-white font-bold text-sm shadow-md shadow-indigo-500/25 shrink-0">
+                            FK
+                        </div>
+                        <div class="truncate">
+                            <h1 class="font-bold text-sm text-slate-900 dark:text-slate-100 leading-none">{site?.name || 'LaraSvelte'}</h1>
+                            <span class="text-[10px] text-indigo-500 font-semibold tracking-wider uppercase">Enterprise CMS</span>
+                        </div>
+                    {/if}
                 {/if}
             </Link>
         </div>

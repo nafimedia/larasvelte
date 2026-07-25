@@ -17,6 +17,8 @@
     let isSidebarOpen = $state(false);
 
     const pageProps = $derived(page.props as unknown as PageProps);
+    const site = $derived(pageProps.site);
+    const branding = $derived(pageProps.branding);
     const flash = $derived(pageProps.flash);
 
     $effect(() => {
@@ -36,7 +38,13 @@
 </script>
 
 <svelte:head>
-    <title>{title} - LaraSvelte</title>
+    <title>{title} - {site?.name || 'LaraSvelte'}</title>
+    {#if branding?.admin_favicon || branding?.public_favicon}
+        <link rel="icon" href={branding?.admin_favicon || branding?.public_favicon} />
+    {/if}
+    {#if branding?.public_apple_touch_icon}
+        <link rel="apple-touch-icon" href={branding.public_apple_touch_icon} />
+    {/if}
 </svelte:head>
 
 <div class="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col font-sans transition-colors">

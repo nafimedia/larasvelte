@@ -141,11 +141,14 @@
 </script>
 
 <svelte:head>
-    <title>FairuzKit — Starter Kit Laravel 13 + Svelte 5 + Inertia Modern</title>
-    <meta
-        name="description"
-        content="Starter kit full-stack terlengkap dengan Svelte 5 Runes, Laravel 13 RBAC, Inertia.js, Tailwind v4 & Dark Mode bawaan."
-    />
+    <title>{site.name} — Modern CMS Platform</title>
+    <meta name="description" content={site.description} />
+    {#if branding?.public_favicon}
+        <link rel="icon" href={branding.public_favicon} />
+    {/if}
+    {#if branding?.public_apple_touch_icon}
+        <link rel="apple-touch-icon" href={branding.public_apple_touch_icon} />
+    {/if}
 </svelte:head>
 
 <div
@@ -163,25 +166,31 @@
         <div class="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
             <!-- Brand Logo -->
             <Link href="/" class="group flex items-center gap-3">
-                <div
-                    class="h-10 w-10 rounded-xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 p-0.5 shadow-lg shadow-indigo-500/30 transition-transform duration-300 group-hover:scale-105"
-                >
-                    <div class="flex h-full w-full items-center justify-center rounded-[10px] bg-white dark:bg-slate-950">
-                        <Sparkles
-                            class="h-5 w-5 text-indigo-500 dark:text-indigo-400 transition-transform duration-300 group-hover:rotate-12"
-                        />
+                {#if branding?.public_logo_dark || branding?.public_logo_light}
+                    <div class="h-10 flex items-center">
+                        {#if branding.public_logo_dark}
+                            <img src={branding.public_logo_dark} alt={site.name} class="h-9 object-contain hidden dark:block" />
+                        {/if}
+                        <img src={branding.public_logo_light || branding.public_logo_dark} alt={site.name} class={`h-9 object-contain ${branding.public_logo_dark ? 'dark:hidden' : ''}`} />
                     </div>
-                </div>
-                <div>
-                    <span
-                        class="bg-gradient-to-r from-slate-900 dark:from-white via-slate-700 dark:via-slate-100 to-slate-500 dark:to-slate-400 bg-clip-text text-xl font-black tracking-tight text-transparent"
+                {:else}
+                    <div
+                        class="h-10 w-10 rounded-xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 p-0.5 shadow-lg shadow-indigo-500/30 transition-transform duration-300 group-hover:scale-105"
                     >
-                        Fairuz<span class="text-indigo-500 dark:text-indigo-400">Kit</span>
-                    </span>
-                    <span class="-mt-1 block text-[10px] font-semibold tracking-widest text-indigo-500 dark:text-indigo-400 uppercase">
-                        Svelte 5 Starter
-                    </span>
-                </div>
+                        <div class="flex h-full w-full items-center justify-center rounded-[10px] bg-white dark:bg-slate-950">
+                            <Sparkles
+                                class="h-5 w-5 text-indigo-500 dark:text-indigo-400 transition-transform duration-300 group-hover:rotate-12"
+                            />
+                        </div>
+                    </div>
+                    <div>
+                        <span
+                            class="bg-gradient-to-r from-slate-900 dark:from-white via-slate-700 dark:via-slate-100 to-slate-500 dark:to-slate-400 bg-clip-text text-xl font-black tracking-tight text-transparent"
+                        >
+                            {site.name}
+                        </span>
+                    </div>
+                {/if}
             </Link>
 
             <!-- Navigation Links (Dynamic from Menu Management) -->
@@ -615,16 +624,19 @@
             class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 sm:flex-row sm:px-6 lg:px-8"
         >
             <div class="flex items-center gap-3">
-                <div
-                    class="flex h-7 w-7 items-center justify-center rounded-lg bg-indigo-600 text-sm font-black text-white"
-                >
-                    F
-                </div>
-                <span class="font-semibold text-slate-900 dark:text-slate-300">FairuzKit Starter Kit</span>
-                <span>— Svelte 5 + Laravel 13</span>
+                {#if branding?.public_logo_footer}
+                    <img src={branding.public_logo_footer} alt={site.name} class="h-7 object-contain" />
+                {:else}
+                    <div
+                        class="flex h-7 w-7 items-center justify-center rounded-lg bg-indigo-600 text-sm font-black text-white"
+                    >
+                        {site.name.charAt(0).toUpperCase()}
+                    </div>
+                    <span class="font-semibold text-slate-900 dark:text-slate-300">{site.name}</span>
+                {/if}
             </div>
 
-            <p>© 2026 FairuzKit. Dibuat dengan cinta & performa tinggi.</p>
+            <p>© {new Date().getFullYear()} {site.name}. All rights reserved.</p>
         </div>
     </footer>
 </div>

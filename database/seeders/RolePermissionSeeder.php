@@ -29,6 +29,8 @@ class RolePermissionSeeder extends Seeder
             'activity_logs.view',
             'settings.view',
             'settings.edit',
+            'branding.view',
+            'branding.edit',
         ];
 
         foreach ($permissions as $permission) {

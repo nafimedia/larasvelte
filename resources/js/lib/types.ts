@@ -16,6 +16,28 @@ export interface SiteSettings {
     enable_registration: boolean;
 }
 
+export interface BrandingSettings {
+    public_logo_light?: string | null;
+    public_logo_dark?: string | null;
+    public_logo_mobile?: string | null;
+    public_logo_footer?: string | null;
+    public_favicon?: string | null;
+    public_apple_touch_icon?: string | null;
+    admin_logo_light?: string | null;
+    admin_logo_dark?: string | null;
+    admin_logo_collapsed?: string | null;
+    admin_favicon?: string | null;
+    admin_login_logo?: string | null;
+}
+
+export interface BrandingAsset {
+    key: string;
+    value: string | null;
+    url: string | null;
+    label: string;
+    description?: string;
+}
+
 export interface FlashMessages {
     success?: string;
     error?: string;
@@ -28,6 +50,7 @@ export interface PageProps {
         user: User | null;
     };
     site: SiteSettings;
+    branding: BrandingSettings;
     flash: FlashMessages;
     errors: Record<string, string>;
 }

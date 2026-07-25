@@ -60,6 +60,9 @@ class HandleInertiaRequests extends Middleware
                 'maintenance_mode' => filter_var($settings['maintenance_mode'] ?? 'false', FILTER_VALIDATE_BOOLEAN),
                 'enable_registration' => filter_var($settings['enable_registration'] ?? 'true', FILTER_VALIDATE_BOOLEAN),
             ],
+            'branding' => \Illuminate\Support\Facades\Schema::hasTable('site_settings')
+                ? \App\Http\Controllers\Admin\BrandingController::getCachedBranding()
+                : [],
             'flash' => [
                 'success' => fn () => $request->session()->get('success'),
                 'error' => fn () => $request->session()->get('error'),

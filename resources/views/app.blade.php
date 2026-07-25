@@ -10,6 +10,19 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=JetBrains Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
+        <!-- Favicon & Touch Icon -->
+        @php
+            $branding = \Illuminate\Support\Facades\Schema::hasTable('site_settings')
+                ? \App\Http\Controllers\Admin\BrandingController::getCachedBranding()
+                : [];
+        @endphp
+        @if (!empty($branding['public_favicon']))
+            <link rel="icon" href="{{ $branding['public_favicon'] }}" />
+        @endif
+        @if (!empty($branding['public_apple_touch_icon']))
+            <link rel="apple-touch-icon" href="{{ $branding['public_apple_touch_icon'] }}" />
+        @endif
+
         <!-- Anti-FOUC Theme Initializer -->
         <script>
             (function() {

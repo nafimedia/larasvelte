@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\LandingBuilderController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\BrandingController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\ProfileController;
@@ -189,10 +190,15 @@ Route::post('/forms/{slug}/submit', [FormBuilderController::class, 'submitPublic
             Route::delete('/activity-logs/clear', [ActivityLogController::class, 'clear'])->name('activity-logs.clear');
         });
 
-        // Site Settings
+        // Site Settings & Branding Management
         Route::middleware('permission:settings.view')->group(function () {
             Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
             Route::put('/settings', [SettingController::class, 'update'])->middleware('permission:settings.edit')->name('settings.update');
+
+            // Branding Management
+            Route::get('/settings/branding', [BrandingController::class, 'index'])->name('settings.branding.index');
+            Route::post('/settings/branding/upload', [BrandingController::class, 'upload'])->middleware('permission:settings.edit')->name('settings.branding.upload');
+            Route::delete('/settings/branding/{key}', [BrandingController::class, 'destroy'])->middleware('permission:settings.edit')->name('settings.branding.destroy');
         });
     });
 });
