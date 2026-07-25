@@ -8,7 +8,7 @@ LaraSvelte is a modern CMS platform built with Laravel, Inertia.js, and Svelte 5
 
 ## Technology Stack
 
-- **Backend**: Laravel 13 / PHP 8.2+
+- **Backend**: Laravel 13 / PHP 8.3
 - **Frontend**: Svelte 5 with Inertia.js
 - **Styling**: Tailwind CSS v4
 - **Database**: MySQL / PostgreSQL
