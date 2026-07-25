@@ -20,7 +20,7 @@ use App\Http\Controllers\Auth\ProfileController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\Admin\Cms\MenuController;
 use App\Http\Controllers\Admin\Cms\MediaController;
-use App\Http\Controllers\Admin\Cms\FormBuilderController;
+use App\Http\Controllers\Admin\FormBuilderController;
 use App\Http\Controllers\Admin\Cms\RedirectController;
 use Illuminate\Support\Facades\Route;
 
