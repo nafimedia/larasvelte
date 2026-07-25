@@ -45,10 +45,10 @@
 
     function submitCreate(e: Event) {
         e.preventDefault();
-        $createForm.post('/admin/cms/forms', {
+        createForm.post('/admin/cms/forms', {
             onSuccess: () => {
                 isCreateOpen = false;
-                $createForm.reset();
+                createForm.reset();
             },
         });
     }
@@ -209,18 +209,18 @@
             <Input
                 label="Judul Formulir"
                 placeholder="mis. Formulir Pendaftaran Event 2026"
-                bind:value={$createForm.title}
-                error={$createForm.errors.title}
+                bind:value={createForm.title}
+                error={createForm.errors.title}
                 required
             />
 
             <div class="space-y-1.5">
-                <label class="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                <span class="text-xs font-semibold text-slate-700 dark:text-slate-300">
                     Deskripsi Singkat (Opsional)
-                </label>
+                </span>
                 <textarea
                     placeholder="Berikan petunjuk atau latar belakang pengisian formulir..."
-                    bind:value={$createForm.description}
+                    bind:value={createForm.description}
                     rows="3"
                     class="w-full px-3 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/30"
                 ></textarea>
@@ -228,7 +228,7 @@
 
             <div class="flex justify-end gap-2 pt-2">
                 <Button type="button" variant="outline" onclick={() => isCreateOpen = false}>Batal</Button>
-                <Button type="submit" loading={$createForm.processing}>Buat & Buka Studio</Button>
+                <Button type="submit" loading={createForm.processing}>Buat & Buka Studio</Button>
             </div>
         </form>
     </Dialog>

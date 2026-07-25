@@ -5,7 +5,6 @@
     import Card from '@/Components/UI/Card.svelte';
     import Button from '@/Components/UI/Button.svelte';
     import Input from '@/Components/UI/Input.svelte';
-    import Badge from '@/Components/UI/Badge.svelte';
     import Dialog from '@/Components/UI/Dialog.svelte';
     import {
         FileSpreadsheet,
@@ -46,39 +45,36 @@
     let activeTab = $state<'questions' | 'responses' | 'settings'>('questions');
     let selectedSubmission = $state<FormSubmissionItem | null>(null);
 
-    function createStudioForm(formObj: FormItem) {
-        return {
-            title: formObj.title,
-            slug: formObj.slug,
-            description: formObj.description || '',
-            theme_color: formObj.theme_color || '#6366F1',
-            is_accepting_responses: formObj.is_accepting_responses,
-            confirmation_message: formObj.confirmation_message || 'Terima kasih, tanggapan Anda telah berhasil disimpan.',
-            require_login: formObj.require_login,
-            fields: formObj.fields && formObj.fields.length > 0 ? formObj.fields.map(f => ({
-                id: f.id,
-                type: f.type,
-                label: f.label,
-                help_text: f.help_text || '',
-                placeholder: f.placeholder || '',
-                options: f.options && f.options.length > 0 ? [...f.options] : ['Opsi 1'],
-                is_required: f.is_required,
-                order: f.order,
-            })) : [
-                {
-                    type: 'text' as const,
-                    label: 'Pertanyaan Tanpa Judul',
-                    help_text: '',
-                    placeholder: '',
-                    options: ['Opsi 1'],
-                    is_required: false,
-                    order: 1,
-                }
-            ],
-        };
-    }
-
-    const studioForm = useForm(createStudioForm(form));
+    // svelte-ignore state_referenced_locally
+    const studioForm = useForm({
+        title: form.title,
+        slug: form.slug,
+        description: form.description || '',
+        theme_color: form.theme_color || '#6366F1',
+        is_accepting_responses: form.is_accepting_responses,
+        confirmation_message: form.confirmation_message || 'Terima kasih, tanggapan Anda telah berhasil disimpan.',
+        require_login: form.require_login,
+        fields: form.fields && form.fields.length > 0 ? form.fields.map(f => ({
+            id: f.id,
+            type: f.type,
+            label: f.label,
+            help_text: f.help_text || '',
+            placeholder: f.placeholder || '',
+            options: f.options && f.options.length > 0 ? [...f.options] : ['Opsi 1'],
+            is_required: f.is_required,
+            order: f.order,
+        })) : [
+            {
+                type: 'text' as const,
+                label: 'Pertanyaan Tanpa Judul',
+                help_text: '',
+                placeholder: '',
+                options: ['Opsi 1'],
+                is_required: false,
+                order: 1,
+            }
+        ],
+    });
 
     const fieldTypes = [
         { type: 'text', label: 'Jawaban Singkat', icon: Type },
@@ -92,19 +88,19 @@
     ];
 
     function addQuestion() {
-        $studioForm.fields.push({
+        studioForm.fields.push({
             type: 'text',
             label: 'Pertanyaan Baru',
             help_text: '',
             placeholder: '',
             options: ['Opsi 1', 'Opsi 2'],
             is_required: false,
-            order: $studioForm.fields.length + 1,
+            order: studioForm.fields.length + 1,
         });
     }
 
     function duplicateQuestion(index: number) {
-        const source = $studioForm.fields[index];
+        const source = studioForm.fields[index];
         const copy: FormFieldItem = {
             type: source.type,
             label: `${source.label} (Salinan)`,
@@ -112,34 +108,34 @@
             placeholder: source.placeholder,
             options: source.options ? [...source.options] : ['Opsi 1'],
             is_required: source.is_required,
-            order: $studioForm.fields.length + 1,
+            order: studioForm.fields.length + 1,
         };
-        $studioForm.fields.splice(index + 1, 0, copy);
+        studioForm.fields.splice(index + 1, 0, copy);
     }
 
     function removeQuestion(index: number) {
-        if ($studioForm.fields.length <= 1) {
+        if (studioForm.fields.length <= 1) {
             toast.error('Formulir harus memiliki minimal 1 pertanyaan.');
             return;
         }
-        $studioForm.fields.splice(index, 1);
+        studioForm.fields.splice(index, 1);
     }
 
     function addOption(fieldIndex: number) {
-        const field = $studioForm.fields[fieldIndex];
+        const field = studioForm.fields[fieldIndex];
         if (!field.options) field.options = [];
         field.options.push(`Opsi ${field.options.length + 1}`);
     }
 
     function removeOption(fieldIndex: number, optionIndex: number) {
-        const field = $studioForm.fields[fieldIndex];
+        const field = studioForm.fields[fieldIndex];
         if (field.options && field.options.length > 1) {
             field.options.splice(optionIndex, 1);
         }
     }
 
     function saveStudio() {
-        $studioForm.put(`/admin/cms/forms/${form.id}`, {
+        studioForm.put(`/admin/cms/forms/${form.id}`, {
             preserveScroll: true,
             onSuccess: () => toast.success('Formulir Studio berhasil disimpan!'),
         });
@@ -149,19 +145,19 @@
         router.patch(`/admin/cms/forms/${form.id}/toggle-responses`, {}, {
             preserveScroll: true,
             onSuccess: () => {
-                $studioForm.is_accepting_responses = !$studioForm.is_accepting_responses;
+                studioForm.is_accepting_responses = !studioForm.is_accepting_responses;
             }
         });
     }
 
     function copyShareLink() {
-        const url = `${window.location.origin}/f/${$studioForm.slug}`;
+        const url = `${window.location.origin}/f/${studioForm.slug}`;
         navigator.clipboard.writeText(url);
         toast.success('Link tautan formulir berhasil disalin!');
     }
 
     function copyEmbedCode() {
-        const url = `${window.location.origin}/f/${$studioForm.slug}`;
+        const url = `${window.location.origin}/f/${studioForm.slug}`;
         const iframe = `<iframe src="${url}" width="100%" height="700" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>`;
         navigator.clipboard.writeText(iframe);
         toast.success('Kode iframe embed berhasil disalin!');
@@ -184,12 +180,12 @@
                 <div class="flex items-center gap-2">
                     <input
                         type="text"
-                        bind:value={$studioForm.title}
+                        bind:value={studioForm.title}
                         class="text-lg font-bold text-slate-900 dark:text-slate-100 bg-transparent border-b border-transparent hover:border-slate-300 focus:border-indigo-500 focus:outline-none px-1"
                     />
                 </div>
                 <div class="flex items-center gap-2 text-xs text-slate-400 mt-0.5">
-                    <span>URL: /f/{$studioForm.slug}</span>
+                    <span>URL: /f/{studioForm.slug}</span>
                 </div>
             </div>
         </div>
@@ -200,7 +196,7 @@
                 <span class="text-xs text-slate-500 font-medium">Tema:</span>
                 <input
                     type="color"
-                    bind:value={$studioForm.theme_color}
+                    bind:value={studioForm.theme_color}
                     class="w-6 h-6 rounded-md cursor-pointer border-0 bg-transparent"
                 />
             </div>
@@ -214,7 +210,7 @@
                 <Eye class="w-5 h-5" />
             </a>
 
-            <Button onclick={saveStudio} loading={$studioForm.processing} class="cursor-pointer gap-2">
+            <Button onclick={saveStudio} loading={studioForm.processing} class="cursor-pointer gap-2">
                 <Save class="w-4 h-4" />
                 <span>Simpan</span>
             </Button>
@@ -269,16 +265,16 @@
             <!-- Form Header Card (Google Forms Style Top Card) -->
             <div
                 class="p-6 rounded-2xl bg-white dark:bg-slate-900 border-t-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4"
-                style="border-top-color: {$studioForm.theme_color}"
+                style="border-top-color: {studioForm.theme_color}"
             >
                 <input
                     type="text"
-                    bind:value={$studioForm.title}
+                    bind:value={studioForm.title}
                     placeholder="Judul Formulir"
                     class="w-full text-2xl font-black text-slate-900 dark:text-slate-100 bg-transparent border-b border-slate-200 dark:border-slate-800 focus:border-indigo-500 focus:outline-none pb-2"
                 />
                 <textarea
-                    bind:value={$studioForm.description}
+                    bind:value={studioForm.description}
                     placeholder="Deskripsi formulir (petunjuk pengisian)..."
                     rows="2"
                     class="w-full text-xs text-slate-600 dark:text-slate-400 bg-transparent border-b border-slate-200 dark:border-slate-800 focus:border-indigo-500 focus:outline-none pb-1"
@@ -287,7 +283,7 @@
 
             <!-- Question Cards List -->
             <div class="space-y-4">
-                {#each $studioForm.fields as field, index (index)}
+                {#each studioForm.fields as field, index (index)}
                     <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4 relative group hover:border-indigo-300 transition-colors">
                         <!-- Top Grip Handle & Question Number -->
                         <div class="flex items-center justify-between text-slate-400">
@@ -346,7 +342,7 @@
                                         <button
                                             type="button"
                                             onclick={() => removeOption(index, optIdx)}
-                                            class="p-1 text-slate-400 hover:text-rose-600 transition-colors"
+                                            class="p-1 text-slate-400 hover:text-rose-600 transition-colors cursor-pointer"
                                             title="Hapus Opsi"
                                         >
                                             <XCircle class="w-4 h-4" />
@@ -430,7 +426,7 @@
                         {form.submissions?.length ?? 0} Tanggapan
                     </h2>
                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                        {form.is_accepting_responses ? 'Formulir aktif menerima tanggapan baru' : 'Formulir ditutup untuk tanggapan baru'}
+                        {studioForm.is_accepting_responses ? 'Formulir aktif menerima tanggapan baru' : 'Formulir ditutup untuk tanggapan baru'}
                     </p>
                 </div>
 
@@ -439,12 +435,12 @@
                         type="button"
                         onclick={toggleResponses}
                         class={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${
-                            $studioForm.is_accepting_responses
+                            studioForm.is_accepting_responses
                                 ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 border border-emerald-200'
                                 : 'bg-rose-50 dark:bg-rose-950/50 text-rose-600 border border-rose-200'
                         }`}
                     >
-                        {#if $studioForm.is_accepting_responses}
+                        {#if studioForm.is_accepting_responses}
                             <CheckCircle2 class="w-4 h-4" />
                             <span>Menerima Tanggapan</span>
                         {:else}
@@ -521,17 +517,17 @@
 
                 <Input
                     label="Slug URL Formulir Publik"
-                    bind:value={$studioForm.slug}
-                    error={$studioForm.errors.slug}
+                    bind:value={studioForm.slug}
+                    error={studioForm.errors.slug}
                     required
                 />
 
                 <div class="space-y-1.5">
-                    <label class="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                    <span class="text-xs font-semibold text-slate-700 dark:text-slate-300">
                         Pesan Konfirmasi Setelah Submit
-                    </label>
+                    </span>
                     <textarea
-                        bind:value={$studioForm.confirmation_message}
+                        bind:value={studioForm.confirmation_message}
                         rows="3"
                         class="w-full px-3 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/30"
                     ></textarea>
@@ -540,7 +536,7 @@
                 <label class="flex items-center gap-3 pt-2 cursor-pointer">
                     <input
                         type="checkbox"
-                        bind:checked={$studioForm.require_login}
+                        bind:checked={studioForm.require_login}
                         class="rounded text-indigo-600 focus:ring-indigo-500"
                     />
                     <div>
@@ -554,12 +550,12 @@
                 <h3 class="text-sm font-bold text-slate-900 dark:text-slate-100">Bagikan & Embed</h3>
 
                 <div class="space-y-2">
-                    <label class="text-xs font-semibold text-slate-600">Link Tautan Publik</label>
+                    <span class="text-xs font-semibold text-slate-600">Link Tautan Publik</span>
                     <div class="flex items-center gap-2">
                         <input
                             type="text"
                             readonly
-                            value={`${window.location.origin}/f/${$studioForm.slug}`}
+                            value={`${window.location.origin}/f/${studioForm.slug}`}
                             class="w-full text-xs px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 font-mono text-slate-600 dark:text-slate-300"
                         />
                         <Button type="button" onclick={copyShareLink} class="shrink-0 gap-1.5 cursor-pointer">
@@ -570,12 +566,12 @@
                 </div>
 
                 <div class="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800">
-                    <label class="text-xs font-semibold text-slate-600">Kode Embed iFrame</label>
+                    <span class="text-xs font-semibold text-slate-600">Kode Embed iFrame</span>
                     <div class="flex items-center gap-2">
                         <input
                             type="text"
                             readonly
-                            value={`<iframe src="${window.location.origin}/f/${$studioForm.slug}" width="100%" height="700" frameborder="0"></iframe>`}
+                            value={`<iframe src="${window.location.origin}/f/${studioForm.slug}" width="100%" height="700" frameborder="0"></iframe>`}
                             class="w-full text-xs px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 font-mono text-slate-600 dark:text-slate-300 truncate"
                         />
                         <Button type="button" variant="outline" onclick={copyEmbedCode} class="shrink-0 gap-1.5 cursor-pointer">
