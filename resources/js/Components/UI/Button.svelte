@@ -8,6 +8,7 @@
         variant?: 'primary' | 'secondary' | 'danger' | 'ghost' | 'outline' | 'success';
         size?: 'sm' | 'md' | 'lg' | 'icon';
         disabled?: boolean;
+        loading?: boolean;
         class?: string;
         children?: Snippet;
         onclick?: (e: MouseEvent) => void;
@@ -18,6 +19,7 @@
         variant = 'primary',
         size = 'md',
         disabled = false,
+        loading = false,
         class: className = '',
         children,
         onclick,

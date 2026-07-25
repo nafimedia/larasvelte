@@ -5,7 +5,7 @@
     import Card from '@/Components/UI/Card.svelte';
     import Button from '@/Components/UI/Button.svelte';
     import Input from '@/Components/UI/Input.svelte';
-    import Dialog from '@/Components/UI/Dialog.svelte';
+    import Modal from '@/Components/UI/Modal.svelte';
     import {
         FileSpreadsheet,
         Plus,
@@ -89,6 +89,7 @@
 
     function addQuestion() {
         studioForm.fields.push({
+            id: undefined,
             type: 'text',
             label: 'Pertanyaan Baru',
             help_text: '',
@@ -102,6 +103,7 @@
     function duplicateQuestion(index: number) {
         const source = studioForm.fields[index];
         const copy: FormFieldItem = {
+            id: undefined,
             type: source.type,
             label: `${source.label} (Salinan)`,
             help_text: source.help_text,
@@ -585,7 +587,7 @@
     {/if}
 
     <!-- Submission Detail Modal -->
-    <Dialog open={selectedSubmission !== null} onClose={() => selectedSubmission = null} title="Detail Tanggapan Respon">
+    <Modal open={selectedSubmission !== null} onclose={() => selectedSubmission = null} title="Detail Tanggapan Respon">
         {#if selectedSubmission}
             <div class="space-y-4 text-xs">
                 <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 flex justify-between text-slate-500 font-mono">
@@ -613,5 +615,5 @@
                 </div>
             </div>
         {/if}
-    </Dialog>
+    </Modal>
 </AppLayout>

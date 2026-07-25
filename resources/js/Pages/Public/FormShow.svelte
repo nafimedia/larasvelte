@@ -35,22 +35,23 @@
         return payload;
     }
 
+    // svelte-ignore state_referenced_locally
     const publicForm = useForm(createInitialPayload(form));
 
     function submitPublic(e: Event) {
         e.preventDefault();
-        $publicForm.post(`/f/${form.slug}/submit`, {
+        publicForm.post(`/f/${form.slug}/submit`, {
             preserveScroll: true,
         });
     }
 
     function toggleCheckboxOption(fieldId: number, option: string) {
         const key = `field_${fieldId}`;
-        const currentArr = $publicForm[key] || [];
+        const currentArr = publicForm[key] || [];
         if (currentArr.includes(option)) {
-            $publicForm[key] = currentArr.filter((item: string) => item !== option);
+            publicForm[key] = currentArr.filter((item: string) => item !== option);
         } else {
-            $publicForm[key] = [...currentArr, option];
+            publicForm[key] = [...currentArr, option];
         }
     }
 </script>
@@ -114,17 +115,17 @@
             <form onsubmit={submitPublic} class="space-y-6">
                 {#each form.fields || [] as field (field.id)}
                     {@const fieldKey = `field_${field.id}`}
-                    {@const fieldError = $publicForm.errors[fieldKey]}
+                    {@const fieldError = publicForm.errors[fieldKey]}
 
                     <div class={`p-6 rounded-2xl bg-white dark:bg-slate-900 border shadow-sm space-y-3 transition-colors ${
                         fieldError ? 'border-rose-300 dark:border-rose-900 ring-2 ring-rose-500/10' : 'border-slate-200 dark:border-slate-800'
                     }`}>
-                        <label class="block text-sm font-bold text-slate-900 dark:text-slate-100">
+                        <span class="block text-sm font-bold text-slate-900 dark:text-slate-100">
                             {field.label}
                             {#if field.is_required}
                                 <span class="text-rose-500 font-bold ml-1">*</span>
                             {/if}
-                        </label>
+                        </span>
 
                         {#if field.help_text}
                             <p class="text-xs text-slate-400">{field.help_text}</p>
@@ -135,7 +136,7 @@
                             <input
                                 type="text"
                                 placeholder={field.placeholder || 'Jawaban Anda'}
-                                bind:value={$publicForm[fieldKey]}
+                                bind:value={publicForm[fieldKey]}
                                 class="w-full text-xs px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/30"
                             />
                         {/if}
@@ -144,7 +145,7 @@
                         {#if field.type === 'paragraph'}
                             <textarea
                                 placeholder={field.placeholder || 'Jawaban Anda'}
-                                bind:value={$publicForm[fieldKey]}
+                                bind:value={publicForm[fieldKey]}
                                 rows="3"
                                 class="w-full text-xs px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/30"
                             ></textarea>
@@ -159,7 +160,7 @@
                                             type="radio"
                                             name={fieldKey}
                                             value={opt}
-                                            bind:group={$publicForm[fieldKey]}
+                                            bind:group={publicForm[fieldKey]}
                                             class="text-indigo-600 focus:ring-indigo-500"
                                         />
                                         <span>{opt}</span>
@@ -172,7 +173,7 @@
                         {#if field.type === 'checkboxes'}
                             <div class="space-y-2 pt-1">
                                 {#each field.options || [] as opt}
-                                    {@const isChecked = ($publicForm[fieldKey] || []).includes(opt)}
+                                    {@const isChecked = (publicForm[fieldKey] || []).includes(opt)}
                                     <label class="flex items-center gap-3 cursor-pointer text-xs text-slate-700 dark:text-slate-300">
                                         <input
                                             type="checkbox"
@@ -189,7 +190,7 @@
                         <!-- Dropdown Select -->
                         {#if field.type === 'dropdown'}
                             <select
-                                bind:value={$publicForm[fieldKey]}
+                                bind:value={publicForm[fieldKey]}
                                 class="w-full text-xs px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/30"
                             >
                                 <option value="">-- Pilih Salah Satu --</option>
@@ -206,7 +207,7 @@
                                 onchange={(e) => {
                                     const target = e.target as HTMLInputElement;
                                     if (target.files && target.files[0]) {
-                                        $publicForm[fieldKey] = target.files[0];
+                                        publicForm[fieldKey] = target.files[0];
                                     }
                                 }}
                                 class="w-full text-xs px-4 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none"
@@ -217,7 +218,7 @@
                         {#if field.type === 'date'}
                             <input
                                 type="date"
-                                bind:value={$publicForm[fieldKey]}
+                                bind:value={publicForm[fieldKey]}
                                 class="text-xs px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none"
                             />
                         {/if}
@@ -231,7 +232,7 @@
                                             type="radio"
                                             name={fieldKey}
                                             value={score}
-                                            bind:group={$publicForm[fieldKey]}
+                                            bind:group={publicForm[fieldKey]}
                                             class="text-indigo-600 focus:ring-indigo-500"
                                         />
                                         <span class="text-xs font-bold text-slate-600 dark:text-slate-400">{score}</span>
@@ -254,17 +255,17 @@
                 <div class="flex items-center justify-between pt-2">
                     <button
                         type="submit"
-                        disabled={$publicForm.processing}
+                        disabled={publicForm.processing}
                         class="px-8 py-3 rounded-xl text-xs font-bold text-white shadow-md hover:shadow-lg transition-all cursor-pointer flex items-center gap-2"
                         style="background-color: {form.theme_color || '#6366F1'}"
                     >
                         <Send class="w-4 h-4" />
-                        <span>{$publicForm.processing ? 'Mengirim...' : 'Kirim Tanggapan'}</span>
+                        <span>{publicForm.processing ? 'Mengirim...' : 'Kirim Tanggapan'}</span>
                     </button>
 
                     <button
                         type="button"
-                        onclick={() => $publicForm.reset()}
+                        onclick={() => publicForm.reset()}
                         class="text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 font-semibold"
                     >
                         Kosongkan Formulir

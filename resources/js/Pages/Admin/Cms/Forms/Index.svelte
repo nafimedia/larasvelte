@@ -5,7 +5,7 @@
     import Card from '@/Components/UI/Card.svelte';
     import Button from '@/Components/UI/Button.svelte';
     import Input from '@/Components/UI/Input.svelte';
-    import Dialog from '@/Components/UI/Dialog.svelte';
+    import Modal from '@/Components/UI/Modal.svelte';
     import {
         FileSpreadsheet,
         Plus,
@@ -204,7 +204,7 @@
     </div>
 
     <!-- Create Form Modal Dialog -->
-    <Dialog open={isCreateOpen} onClose={() => isCreateOpen = false} title="Buat Formulir Baru">
+    <Modal open={isCreateOpen} onclose={() => isCreateOpen = false} title="Buat Formulir Baru">
         <form onsubmit={submitCreate} class="space-y-4">
             <Input
                 label="Judul Formulir"
@@ -231,5 +231,5 @@
                 <Button type="submit" loading={createForm.processing}>Buat & Buka Studio</Button>
             </div>
         </form>
-    </Dialog>
+    </Modal>
 </AppLayout>
